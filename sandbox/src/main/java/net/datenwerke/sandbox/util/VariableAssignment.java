@@ -42,7 +42,7 @@ public class VariableAssignment implements Serializable {
     private final boolean bridge;
 
     public VariableAssignment(Object value) {
-        this(value, null != value ? value.getClass() : null, true)
+        this(value, null != value ? value.getClass() : null, true);
     }
 
     public VariableAssignment(Object value, Class<?> type) {
