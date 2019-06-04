@@ -171,14 +171,16 @@ public class SandboxServiceImpl implements SandboxService {
      * @return
      */
     public static SandboxService getInstance() {
-        if (null == INSTANCE)
+        if (null == INSTANCE) {
             new SandboxServiceImpl();
+        }
         return INSTANCE;
     }
 
     public static SandboxService initInstance(File pathToSandcastle) {
-        if (null != INSTANCE)
+        if (null != INSTANCE) {
             throw new IllegalStateException("already initialized");
+        }
         return new SandboxServiceImpl(pathToSandcastle);
     }
 
