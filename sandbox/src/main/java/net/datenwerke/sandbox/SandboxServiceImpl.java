@@ -105,10 +105,6 @@ public class SandboxServiceImpl implements SandboxService {
     private long monitorDaemonCheckInterval = 10;
     private long monitorWatchdogCheckInterval = 10000;
 
-
-    /**
-     *
-     */
     public SandboxServiceImpl() {
         this(true,
                 new SandboxCleanupServiceImpl(),
@@ -468,8 +464,9 @@ public class SandboxServiceImpl implements SandboxService {
     public synchronized void registerContext(String name, SandboxContext context) {
         getSecurityManager().checkPermission(new SandboxRuntimePermission("registerSandboxContext"));
 
-        for (ContextRegisteredHandler handler : getHandlers(ContextRegisteredHandler.class))
+        for (ContextRegisteredHandler handler : getHandlers(ContextRegisteredHandler.class)) {
             handler.contextRegistered(name, context);
+        }
 
         registeredContexts.put(name, context);
     }

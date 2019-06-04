@@ -25,6 +25,8 @@ package net.datenwerke.sandbox;
 
 
 /**
+ * 允许介入类加载过程
+ * <p>
  * Allows to tap into the classloading process.
  *
  * @author Arno Mittelbach

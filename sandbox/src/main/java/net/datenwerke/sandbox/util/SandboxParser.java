@@ -174,11 +174,12 @@ import org.apache.commons.configuration.SubnodeConfiguration;
  */
 public class SandboxParser {
 
-    private Map<String, SandboxContext> restrictionSets = new HashMap<String, SandboxContext>();
+    private Map<String, SandboxContext> restrictionSets = new HashMap<>();
 
     public void configureSandboxService(SandboxService sandboxService, Configuration config) {
-        if (!(config instanceof HierarchicalConfiguration))
+        if (!(config instanceof HierarchicalConfiguration)) {
             throw new IllegalArgumentException("Expected HierarchicalConfiguration format");
+        }
 
         HierarchicalConfiguration conf = (HierarchicalConfiguration) config;
 
@@ -226,21 +227,24 @@ public class SandboxParser {
 
         /* sandboxes */
         parse(config);
-        for (Entry<String, SandboxContext> e : getRestrictionSets().entrySet())
+        for (Entry<String, SandboxContext> e : getRestrictionSets().entrySet()) {
             sandboxService.registerContext(e.getKey(), e.getValue());
+        }
     }
 
     public void parse(Configuration config) {
-        if (!(config instanceof HierarchicalConfiguration))
+        if (!(config instanceof HierarchicalConfiguration)) {
             throw new IllegalArgumentException("Expected HierarchicalConfiguration format");
+        }
 
         HierarchicalConfiguration conf = (HierarchicalConfiguration) config;
 
         /* sandboxes */
         for (HierarchicalConfiguration rs : conf.configurationsAt("security.sandbox")) {
             String name = rs.getString("[@name]");
-            if (null == name)
+            if (null == name) {
                 throw new IllegalArgumentException("no name for sandbox given");
+            }
 
             SandboxContext set = loadSandbox(name, conf, rs, new HashSet<String>());
             restrictionSets.put(name, set);
@@ -251,8 +255,10 @@ public class SandboxParser {
         SandboxContext context = new SandboxContext();
         String basedOn = contextConf.getString("[@basedOn]");
         if (null != basedOn) {
-            if (basedOnProcessed.contains(basedOn))
+            if (basedOnProcessed.contains(basedOn)) {
                 throw new IllegalStateException("Loop detected: there seems to be a loop in the sandbox configuration at" + basedOn + " and " + name);
+            }
+
             basedOnProcessed.add(basedOn);
 
             HierarchicalConfiguration baseConf = null;
@@ -262,8 +268,9 @@ public class SandboxParser {
                     break;
                 }
             }
-            if (null == baseConf)
+            if (null == baseConf) {
                 throw new IllegalStateException("Could not find config for " + basedOn);
+            }
 
             SandboxContext basis = loadSandbox(name, conf, baseConf, basedOnProcessed);
             context = basis.clone();
@@ -281,12 +288,14 @@ public class SandboxParser {
         context.setBypassPackageAccessChecks(bypassPackageAccesss);
 
         Boolean debug = contextConf.getBoolean("[@debug]", false);
-        if (debug)
+        if (debug) {
             context.setDebug(debug);
+        }
 
         String codesource = contextConf.getString("[@codesource]", null);
-        if (null != codesource && !"".equals(codesource.trim()))
+        if (null != codesource && !"".equals(codesource.trim())) {
             context.setCodesource(codesource);
+        }
 
         /* run in */
         Boolean runInThread = contextConf.getBoolean("[@runInThread]", false);

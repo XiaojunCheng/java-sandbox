@@ -23,16 +23,12 @@
 
 package net.datenwerke.sandbox.jvm;
 
-import java.rmi.RemoteException;
-
-import net.datenwerke.sandbox.SandboxContext;
-import net.datenwerke.sandbox.SandboxService;
-import net.datenwerke.sandbox.SandboxedCallResult;
-import net.datenwerke.sandbox.SandboxedCallResultImpl;
-import net.datenwerke.sandbox.SandboxedEnvironment;
+import net.datenwerke.sandbox.*;
 import net.datenwerke.sandbox.jvm.exceptions.JvmKilledUnsafeThreadException;
 import net.datenwerke.sandbox.jvm.exceptions.JvmServerDeadException;
 import net.datenwerke.sandbox.jvm.exceptions.RemoteTaskExecutionFailed;
+
+import java.rmi.RemoteException;
 
 /**
  * @author Arno Mittelbach
@@ -46,7 +42,6 @@ public class JvmFreelancer {
 
     public JvmFreelancer(JvmPoolConfig jvmConfig) {
         this.jvmConfig = jvmConfig;
-
         jvm = jvmConfig.getInstantiator().spawnJvm();
     }
 
@@ -55,7 +50,6 @@ public class JvmFreelancer {
      */
     protected void shutdown() {
         shutdown = true;
-
         jvm.destroy();
     }
 

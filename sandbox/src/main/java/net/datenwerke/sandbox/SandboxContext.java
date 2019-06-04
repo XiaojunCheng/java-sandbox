@@ -212,16 +212,18 @@ public class SandboxContext implements Serializable {
     public void addPackagePermission(AccessType type, Mode mode, String pkg) {
         switch (type) {
             case PERMIT:
-                if (mode == Mode.PREFIX || pkg.endsWith("."))
+                if (mode == Mode.PREFIX || pkg.endsWith(".")) {
                     packagePrefixWhitelist.add(pkg);
-                else
+                } else {
                     packageWhitelist.add(pkg);
+                }
                 break;
             case DENY:
-                if (mode == Mode.PREFIX || pkg.endsWith("."))
+                if (mode == Mode.PREFIX || pkg.endsWith(".")) {
                     packagePrefixBlacklist.add(pkg);
-                else
+                } else {
                     packageBlacklist.add(pkg);
+                }
                 break;
         }
     }
@@ -869,8 +871,9 @@ public class SandboxContext implements Serializable {
         Collection<SecurityPermission> blacklistedPermissions = permissionBlacklist.get(perm.getClass().getName());
         if (null != blacklistedPermissions) {
             for (SecurityPermission blacklistedPermission : blacklistedPermissions) {
-                if (permissionMatches(blacklistedPermission, perm, stack))
+                if (permissionMatches(blacklistedPermission, perm, stack)) {
                     return false;
+                }
             }
         }
 

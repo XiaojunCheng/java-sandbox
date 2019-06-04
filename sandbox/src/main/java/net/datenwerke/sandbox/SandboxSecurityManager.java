@@ -113,6 +113,7 @@ final public class SandboxSecurityManager extends SecurityManager {
         }
     }
 
+    @Override
     public void checkPermission(Permission perm) {
         if (codesourceSecurityChecks) {
             super.checkPermission(perm);
@@ -132,7 +133,7 @@ final public class SandboxSecurityManager extends SecurityManager {
                     return;
                 }
 
-                Class stack[] = getClassContext();
+                Class[] stack = getClassContext();
                 if (context.checkPermission(perm, stack)) {
                     return;
                 }
@@ -148,9 +149,11 @@ final public class SandboxSecurityManager extends SecurityManager {
         }
     }
 
+    @Override
     public void checkPermission(Permission perm, Object context) {
-        if (codesourceSecurityChecks)
+        if (codesourceSecurityChecks) {
             super.checkPermission(perm, context);
+        }
 
         if (isRestricted()) {
             throw new AccessControlException("Nope");
@@ -164,18 +167,20 @@ final public class SandboxSecurityManager extends SecurityManager {
             try {
                 SandboxContext rs = contextHolder.get();
                 boolean debug = isDebug();
-                if (debug)
+                if (debug) {
                     rs.debugCheckClassAccess(clazz);
+                }
 
-                if (rs.isBypassClassAccessChecks() || rs.isPassAll())
+                if (rs.isBypassClassAccessChecks() || rs.isPassAll()) {
                     return;
+                }
 
-                Class stack[] = getClassContext();
+                Class[] stack = getClassContext();
 
                 if (!rs.checkClassAccess(clazz, stack)) {
-                    if (debug)
+                    if (debug) {
                         rs.debugDeniedClassAccess(clazz, stack);
-
+                    }
                     throw new AccessControlException("No class access allowed for class: " + clazz);
                 }
             } finally {
@@ -184,32 +189,37 @@ final public class SandboxSecurityManager extends SecurityManager {
         }
     }
 
+    @Override
     public void checkPackageAccess(String pkg) {
-        if (codesourceSecurityChecks)
+        if (codesourceSecurityChecks) {
             super.checkPackageAccess(pkg);
+        }
 
         if (isRestricted() && !isInCheck()) {
             /* have to allow java.lang for basic datatype */
-            if ("java.lang".equals(pkg))
+            if ("java.lang".equals(pkg)) {
                 return;
+            }
 
             setInCheck(true);
 
             try {
                 SandboxContext rs = contextHolder.get();
                 boolean debug = isDebug();
-                if (debug)
+                if (debug) {
                     contextHolder.get().debugCheckPackageAccess(pkg);
+                }
 
-                if (rs.isBypassPackageAccessChecks() || rs.isPassAll())
+                if (rs.isBypassPackageAccessChecks() || rs.isPassAll()) {
                     return;
+                }
 
-                Class stack[] = getClassContext();
+                Class[] stack = getClassContext();
 
                 if (!rs.checkPackageAccess(pkg, stack)) {
-                    if (debug)
+                    if (debug) {
                         rs.debugDeniedPackageAccess(pkg, stack);
-
+                    }
                     throw new AccessControlException("No package access allowed for package: " + pkg);
                 }
             } finally {
@@ -219,17 +229,21 @@ final public class SandboxSecurityManager extends SecurityManager {
     }
 
     Class[] getCurrentClassContext() {
-        if (isRestricted())
+        if (isRestricted()) {
             throw new AccessControlException("no classContext during sandbox");
+        }
         return super.getClassContext();
     }
 
+    @Override
     public void checkPackageDefinition(String pkg) {
-        if (codesourceSecurityChecks)
+        if (codesourceSecurityChecks) {
             super.checkPackageDefinition(pkg);
+        }
 
-        if (isRestricted())
+        if (isRestricted()) {
             throw new AccessControlException("no package definition: " + pkg);
+        }
     }
 
     void setCodesourceSecurityChecks(boolean enable) {

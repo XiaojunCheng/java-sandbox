@@ -63,7 +63,6 @@ public class SandboxCleanupServiceImpl implements SandboxCleanupService {
                 MonitorInfo[] lockedMonitors = threadInfo.getLockedMonitors();
                 LockInfo[] lockedSynchronizers = threadInfo.getLockedSynchronizers();
                 safe = (lockedMonitors == null || lockedMonitors.length == 0) && (lockedSynchronizers == null || lockedSynchronizers.length == 0);
-
                 if (!safe) {
                     killInfo = new BadKillInfo(lockedMonitors, lockedSynchronizers, threadInfo.getStackTrace());
                 }
